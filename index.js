@@ -1,6 +1,8 @@
-// const express =require('express')
+require('dotenv').config()
+
+const express =require('express')
 // const mongoose =require('mongoose')
-// const app=express()
+const app=express()
 
 // const http =require('http')
 
@@ -9,7 +11,8 @@ const { MongoClient } = require('mongodb');
 // import { MongoClient } from 'mongodb'
 
 // Connection URL
-const url = 'mongodb://localhost:27017';
+const PORT=process.env.PORT
+const url = process.env.MONGO_URL
 const client = new MongoClient(url);
 
 // Database Name
@@ -27,11 +30,22 @@ async function main() {
     const insertResult = await collection.insertMany([{ a: 1 }, { a: 2 }, { a: 3 }]);
     console.log('Inserted documents =>', insertResult);
 
+
+    // app.listen(5000, () => {
+    //     console.log("listening for requests");
+    // })
     return 'done.';
 }
 
 main()
-    .then(console.log)
+    .then(()=>{
+        const http =require('http')
+        const myServer = http.createServer((req,res)=>{
+            console.log('New request recived');
+            res.end('God is Love')
+    })
+    myServer.listen(PORT,()=>{console.log("server started ",PORT)})
+    console.log})
     .catch(console.error)
     .finally(() => client.close());
 
